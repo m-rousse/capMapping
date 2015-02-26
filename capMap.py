@@ -16,11 +16,18 @@ def main(argv):
     if not present:
         usage()
         sys.exit(2)
-    cap = pyshark.FileCapture(capfile,False)
+    cap = pyshark.FileCapture(input_file=capfile, keep_packets=False)
     i = 0
-    while cap.next():
-        i += 1
-        print(i)
+    paq = True
+    while paq :
+        try:
+            paq = cap._packet_generator.send(None)
+        except:
+            print("Fin")
+            paq = False
+        if paq:
+            i += 1
+            print(i)
     cap.close()
 
 def usage():
